@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  }
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid green;
+  width: 500px;
+  height: 500px;
+  flex-wrap: wrap;
+}
+
+
+.walls {
+  background-color: darkgrey;
+  font-size: 10px;
+}
+
+.notwalls {
+  background-color: white;
+  font-size: 10px;
+}
+
+
+.pacman {
+  background-color:  yellow;
+  font-size: 10px;
+}
+
+.greenGhost {
+  background-color: green;
+}
+
+.orangeGhost {
+  background-color: orange;
+}
+
+.blueGhost {
+  background-color: blue;
+}
+
+.pinkGhost {
+  background-color: pink;
+}
+
+.moveAlong {
+  background-color: papayawhip;
+}
+
+.ghostPen {
+  background-color: rebeccapurple;
+}
