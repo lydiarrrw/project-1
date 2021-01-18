@@ -13,6 +13,10 @@ body {
   
   }
 
+h1{
+    font-family: 'Bungee Shade', cursive;
+  }
+
 .grid {
   display: flex;
   flex-direction: row;
@@ -85,13 +89,26 @@ display: flex;
 
 .score {
   color:black;
+  font-family: 'Bungee', cursive;
 }
 
-.lowerbar {
-  display: flex;
-  justify-content: space-between;
-}
 
-.life{
+.life1 {
   background-color: yellow;
+}
+
+.life2 {
+  background-color: yellow;
+}
+
+.life3 {
+  background-color: yellow;
+}
+
+.energy {
+  background-color: blueviolet;
+}
+
+.greyGhost {
+  background-color: grey;
 }
