@@ -42,10 +42,19 @@ display: flex;
   color: white;
 }
 
+.food1 {
+  
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+}
+
 
 .pacman {
   background-color:  yellow;
   font-size: 10px;
+  
 }
 
 .greenGhost {
@@ -62,8 +71,9 @@ display: flex;
 
 .pinkGhost {
   background-color: pink;
-  /* border: 1px solid white; */
-  /* background: url('images/ghost.png'); */
+  border: 1px solid white;
+  background: url('images/ghost.png');
+  background-size: cover;
 }
 
 .moveAlong {
@@ -74,13 +84,6 @@ display: flex;
   background-color: rebeccapurple;
 }
 
-.food1 {
-  
-  justify-content: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: black;
-}
 
 
 .pen {
@@ -92,7 +95,10 @@ display: flex;
   font-family: 'Bungee', cursive;
 }
 
-
+.life {
+  display: flex;
+  justify-content: space-between;
+}
 .life1 {
   background-color: yellow;
 }
