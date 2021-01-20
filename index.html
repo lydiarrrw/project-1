@@ -11,15 +11,28 @@
 </head>
 <body>
   <main>
-    <!-- <h1>ROSH-MAN</h1> -->
+    <h1>ROSH-MAN</h1>
     <p class="winner"></p>
-     <p class="score">0</p> 
-<div class="grid">
+    <div class="aboveGrid">
+<p class="score">0</p> 
+<button class="startButton" type="button">START</button>
+    </div>
+    <div class="grid">
   </div>
   <div class="lowerbar">
     <div>Lives remaining: <span class="life"> 3</span></div>
-    <div class="cherries"></div>
+    <!-- <div class="cherries">cherries</div> -->
   </div>
+  <div class="controls">
+    <button class="controlButton" class="upButton">UP</button>
+    <button class="controlButton" class="downButton">DOWN</button>
+    <button class="controlButton" class="leftButton">LEFT</button>
+    <button class="controlButton" class="rightButton">RIGHT</button>
+  </div>
+  <div>
+     <button class="resetButton" onClick="window.location.reload();">RESET</button>
+  </div>
+ 
   </main>
   
   <script src="grid.js"></script>

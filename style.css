@@ -12,6 +12,11 @@ body {
   
   }
 
+main {
+  display: flex;
+  flex-direction: column;
+}
+
 h1
 {
     font-family: 'Bungee Shade', cursive;
@@ -26,6 +31,7 @@ p {
   font-family: 'Bungee', cursive;
 }
 
+
 .grid {
   display: flex;
   flex-direction: row;
@@ -39,6 +45,40 @@ display: flex;
 justify-content: center;
 }
 
+.aboveGrid {
+  justify-content: space-between;
+  margin-bottom: 5px;
+  height: 30px;
+}
+
+button {
+  color:black;
+  font-family: 'Bungee', cursive;
+  background-color: white;
+  border: 5px solid black;
+  align-content: center;
+}
+.startButton {
+  width: 30%;
+  
+}
+
+.resetButton {
+  width: 30%;
+  margin-top: 20px;
+}
+
+.controls{
+  display: flex;
+justify-content: space-between;
+}
+
+.controlButton {
+  width: 75px;
+  height: 50px;
+  margin-top: 20px;
+}
+
 .walls {
   background-color: black;
   border: 1px solid black; 
@@ -49,16 +89,18 @@ justify-content: center;
   
 }
 
-.winner{
+.winner {
 height: 20px;
 display: flex;
 justify-content: center;
+padding-bottom: 10px;
+padding-top: 10px;
 }
 
 .food1 {
   background-color: black;
   border: 8px solid white;
-
+  padding: 1px;
 }
 
 
@@ -66,7 +108,9 @@ justify-content: center;
   background-color:  yellow;
   font-size: 10px;
   border: 1px solid yellow;
-  
+  border-radius: 50%;
+  border: 2px sold white;
+
 }
 
 .greenGhost {
@@ -104,23 +148,27 @@ justify-content: center;
   background-size: cover;
 }
 
-.moveAlong {
-  background-color: pink;
+/* .moveAlongPink {
+  
 }
 
-.ghostPen {
-  background-color: rebeccapurple;
+.moveAlongGreen {
+  
 }
 
-
-
-.pen {
-
+.moveAlongBlue {
+ 
 }
+
+.moveAlongOrange {
+
+} */
+
 
 .score {
   color:black;
   font-family: 'Bungee', cursive;
+  
 }
 
 .life {
@@ -130,9 +178,24 @@ justify-content: center;
 .lowerbar {
   color:black;
   font-family: 'Bungee', cursive;
+  justify-content: left;
+  margin: 6px 0px;
 }
 
 .energy {
   background-color: blueviolet;
+  border-radius: 50%;
+  border: 2px solid white;
+
 }
 
+
+
+@media only screen and (min-width: 800px){
+
+  .controls {
+   visibility: hidden;
+  }
+
+
+}
