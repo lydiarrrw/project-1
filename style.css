@@ -7,72 +7,100 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
   margin: 0;
   background-color: #F5F5F5;
   
   }
 
-h1{
+h1
+{
     font-family: 'Bungee Shade', cursive;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    margin: 0px;
   }
+
+p {
+  color:black;
+  font-family: 'Bungee', cursive;
+}
 
 .grid {
   display: flex;
   flex-direction: row;
-  border: 1px solid green;
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   flex-wrap: wrap;
 }
 
 div {
 display: flex;
+justify-content: center;
 }
 
 .walls {
   background-color: black;
-  font-size: 10px;
+  border: 1px solid black; 
 }
 
 .notwalls {
   background-color: white;
-  font-size: 10px;
-  border: 1px solid #F5F5F5;
-  color: white;
+  
+}
+
+.winner{
+height: 20px;
+display: flex;
+justify-content: center;
 }
 
 .food1 {
-  
-  justify-content: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: black;
+  background-color: black;
+  border: 8px solid white;
+
 }
 
 
 .pacman {
   background-color:  yellow;
   font-size: 10px;
+  border: 1px solid yellow;
   
 }
 
 .greenGhost {
   background-color: green;
+  border: 1px solid white;
+  background: url('images/greenghost.png');
+  background-size: cover;
 }
 
 .orangeGhost {
   background-color: orange;
+  border: 1px solid white;
+  background: url('images/orangeghost.png');
+  background-size: cover;
 }
 
 .blueGhost {
   background-color: blue;
+  border: 1px solid white;
+  background: url('images/blueghost.png');
+  background-size: cover;
 }
 
 .pinkGhost {
   background-color: pink;
   border: 1px solid white;
-  background: url('images/ghost.png');
+  background: url('images/pinkghost.png');
+  background-size: cover;
+}
+
+.greyGhost {
+  
+  border: 1px solid white;
+  background: url('images/greyghost.png');
   background-size: cover;
 }
 
@@ -96,25 +124,15 @@ display: flex;
 }
 
 .life {
-  display: flex;
-  justify-content: space-between;
+  color:black;
+  font-family: 'Bungee', cursive;
 }
-.life1 {
-  background-color: yellow;
-}
-
-.life2 {
-  background-color: yellow;
-}
-
-.life3 {
-  background-color: yellow;
+.lowerbar {
+  color:black;
+  font-family: 'Bungee', cursive;
 }
 
 .energy {
   background-color: blueviolet;
 }
 
-.greyGhost {
-  background-color: grey;
-}
