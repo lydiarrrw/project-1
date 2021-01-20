@@ -17,7 +17,7 @@ const winner = document.querySelector('.winner')
 let foodCount = 0
 let energizerCount = 0
 const scoreKeeper = document.querySelector('.score')
-
+let greyMode = false
 let lives = 3
 const livesLeft = document.querySelector('.life')
 //console.log(livesLeft)
@@ -26,7 +26,7 @@ const energizer = [21, 38, 361, 358]
 let pacman = 353
 let score = 0
 
-let pinkGhost = 294 //248
+let pinkGhost = 268
 let greenGhost = 248
 let orangeGhost = 269
 let blueGhost = 270
@@ -80,9 +80,8 @@ function gameover() {
     winner.innerHTML = `You win, your score is ${score}`
     //console.log('winner')
   }
-  console.log('hello', lives)
+  //console.log('hello', lives)
 }
-
 
 
 
@@ -97,11 +96,18 @@ document.addEventListener('keydown', function start(event) {
     cells[pacman].classList.remove('pacman')
     pacman += 1
     cells[pacman].classList.add('pacman')
-    startGhost()
+    startGhost(pinkGhost, 'pinkGhost', 268)
+    startGhost(blueGhost, 'blueGhost', 248)
+    startGhost(greenGhost, 'greenGhost', 269)
+    startGhost(orangeGhost, 'orangeGhost', 270)
+
   }
- if ( lives === 0){
-  document.removeEventListener('keydown', start)
- }
+  if (lives === 0) {
+    document.removeEventListener('keydown', start)
+  }
+
+
+
 
 
   if (key === 'ArrowRight'
@@ -176,7 +182,6 @@ document.addEventListener('keydown', function start(event) {
     cells[pacman].classList.remove('pacman')
     pacman += width // down
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowDown'
     && cells[pacman + width].classList.contains('notwalls')
     && cells[pacman].classList.contains('food1')) {
@@ -196,7 +201,6 @@ document.addEventListener('keydown', function start(event) {
     score += 200
     energizerCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowUp'
     && cells[pacman - width].classList.contains('notwalls')
     && !(cells[pacman].classList.contains('food1'))) {
@@ -214,112 +218,110 @@ document.addEventListener('keydown', function start(event) {
     foodCount--
     cells[pacman].classList.add('pacman')
 
-    // } else if
-    //   (key === 'ArrowUp'
-    //   || key === 'ArrowDown'
-    //   || key === 'ArrowRight'
-    //   || key === 'ArrowLeft'
-    //   && lives === 0) {
-    //   pacman = 353
   }
-
-
   //console.log(score)
 
-  // ==== GREY GHOST MODE =====
-  if (cells[pacman].classList.contains('energy')) {
-    cells[pinkGhost].classList.remove('pinkGhost')
-    cells[pinkGhost].classList.add('greyGhost')
-    setTimeout(() => {
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('pinkGhost')
-      //}
 
+
+  // ==== GREY GHOST MODE =====
+
+  if (cells[pacman].classList.contains('energy')) {
+    greyMode = true
+    greyGhostMode(pinkGhost)
+    greyGhostMode(orangeGhost)
+    greyGhostMode(blueGhost)
+    greyGhostMode(greenGhost)
+
+  }
+
+  function greyGhostMode(ghost) {
+
+    // cells[ghost].classList.add('greyGhost')
+    setTimeout(() => {
+      // cells[ghost].classList.remove('greyGhost')
+      greyMode = false
     }, 5000)
-  
 
   }
 
 
-scoreKeeper.innerHTML = score
-  
-livesLeft.innerHTML = lives - 1
+  scoreKeeper.innerHTML = score
 
+  livesLeft.innerHTML = lives - 1
 
 
 })
 
-function startGhost() {
-  //====================================
-  // ===========GHOOOOOSSSTTTTTSSS=======
-  cells[pinkGhost].classList.remove('pinkGhost')
-  //ghost move?
-  cells[pinkGhost].classList.add('pinkGhost')
 
-  cells[greenGhost].classList.remove('greenGhost')
-  //ghost move?
-  cells[greenGhost].classList.add('greenGhost')
 
-  cells[orangeGhost].classList.remove('orangeGhost')
-  //ghost move?
-  cells[orangeGhost].classList.add('orangeGhost')
-
-  cells[blueGhost].classList.remove('blueGhost')
-  //ghost move?
-  cells[blueGhost].classList.add('blueGhost')
+function startGhost(ghost, string, number) {
+  // ADD GHOULS
+  cells.forEach((cell) => {
+    cell.classList.remove(string)
+  })
+  cells[ghost].classList.remove(string)
+  cells[ghost].classList.add(string)
 
 
 
-  // =====GHOST MOVEMENT====
+  // GHOUL MOVEMENT
+
   const ghostsMoves = setInterval(() => {
+
+
     const randNum = Math.floor((Math.random() * 2) + 1)
     //console.log(randNum + 'original number')
 
     const newRandNum = Math.floor((Math.random() * 3) + 1)
     //console.log(newRandNum + 'new number')
 
-    if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost].classList.contains('pacman')) {
-      console.log('grey ghost mode')
-      cells[pinkGhost].classList.remove('greyGhost')
-      pinkGhost = 294
-      cells[pinkGhost].classList.add('pinkGhost')
-    }
+   
+    if (cells[ghost].classList.contains('greyGhost')
+      && cells[ghost].classList.contains('pacman')) {
+      //console.log('grey ghost mode')
+      cells[ghost].classList.remove('greyGhost')
+      cells[ghost].classList.remove(string)
+      ghost = number
+      cells[ghost].classList.add(string)
+      }
+   
+      cells[ghost].classList.remove('greyGhost')
+    
 
-
-    if (cells[pinkGhost].classList.contains('pacman')
+    if (cells[ghost].classList.contains('pacman')
       && lives === 0) {
       clearInterval(ghostsMoves)
       console.log('gameover2')
       gameover()
-      cells[pinkGhost].classList.remove('pinkGhost')
-      pinkGhost = 294
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      ghost = number
+      cells[ghost].classList.add(string)
 
     }
 
-    else if (cells[pinkGhost].classList.contains('pacman')
+    else if (cells[ghost].classList.contains('pacman')
       && lives >= 1) {
       //console.log('next life')
       setTimeout(() => {
         lives--
         console.log(lives)
         gameover()
-        cells[pinkGhost].classList.remove('pinkGhost')
-        pinkGhost = 294
-        cells[pinkGhost].classList.add('pinkGhost')
+        cells[ghost].classList.remove(string)
+        ghost = number
+        cells[ghost].classList.add(string)
         cells[pacman].classList.remove('pacman')
         pacman = 353
         cells[pacman].classList.add('pacman')
+        startGhost(ghost, string, number)
       }, 1000)
 
       clearInterval(ghostsMoves)
 
     }
 
-    else if (lives === 0) {
-      document.addEventListener('keydown', (event))
-    }
+    // else if (lives === 0) {
+    //   document.addEventListener('keydown', (event))
+    // }
 
 
 
@@ -327,221 +329,223 @@ function startGhost() {
     //--------MOVE IN A LINE --------
     //-----------------------------
     // move upwards in a line
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('moveAlong') || cells[pinkGhost + width].classList.contains('walls'))
-      && !(cells[pinkGhost - width].classList.contains('walls'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('moveAlong') || cells[ghost + width].classList.contains('walls'))
+      && !(cells[ghost - width].classList.contains('walls'))
     ) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
 
       // move downwards in a line
-    } else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('moveAlong') || cells[pinkGhost - width].classList.contains('walls'))
-      && !(cells[pinkGhost + width].classList.contains('walls'))
+    } else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('moveAlong') || cells[ghost - width].classList.contains('walls'))
+      && !(cells[ghost + width].classList.contains('walls'))
     ) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
 
       // move left in a line
-    } else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + 1].classList.contains('moveAlong') || cells[pinkGhost + 1].classList.contains('walls'))
-      && !(cells[pinkGhost - 1].classList.contains('walls'))
+    } else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && (cells[ghost + 1].classList.contains('moveAlong') || cells[ghost + 1].classList.contains('walls'))
+      && !(cells[ghost - 1].classList.contains('walls'))
     ) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
 
 
       // move right in a line
-    } else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('moveAlong') || cells[pinkGhost - 1].classList.contains('walls'))
-      && !(cells[pinkGhost + 1].classList.contains('walls'))
+    } else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && (cells[ghost - 1].classList.contains('moveAlong') || cells[ghost - 1].classList.contains('walls'))
+      && !(cells[ghost + 1].classList.contains('walls'))
     ) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
+
+      
 
 
       //-----TWO DIRECTIONS POSSIBLE----
       //--------------------------------
 
       //right blocked and top blocked rand 1 = go down
-    } else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    } else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && randNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
 
     //right blocked and top blocked rand 2 = go left
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && randNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
 
     // If right is blocked and bottom is blocked + rand 1 = up
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
       && randNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
 
     // If right is blocked and bottom is blocked + rand 2 = left
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
       && randNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
 
     // If left blocked and bottom is blocked + rand 1 = go up
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
       && randNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
     // If left blocked and bottom is blocked + rand 2 = go right
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
       && randNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
 
     // If left blocker and top blocked + rand 1 = go down
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && randNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
 
     // If left blocked and top blaocked + rand 2 = go right
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && randNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
 
@@ -549,1151 +553,469 @@ function startGhost() {
     //------------------------------------------
 
     // Top, bottom and left are empty - new rand 1(left)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
 
     // Top, bottom and left are empty - new rand 2 (bottom)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
 
     // Top, bottom and left are empty - new rand 3 (top)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 3) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
 
     // Top, bottom and right are empty - new rand 1(right)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
     // Top, bottom and right are empty -  new rand 2 (bottom)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
 
     // Top, bottom and right are empty - new rand 3 (up)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
       && newRandNum === 3) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
 
     // Bottom, right and left are empty - new rand 1(left)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
 
 
     // Bottom, right and left are empty -  new rand 2 (down)
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
     // Bottom, right and left are empty -  new rand 3 (right)
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
     // Top, left and right are empty - new rand 1(left)
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 1) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
     // Top, left and right are empty - new rand 2 (up)
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 2) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
 
     // Top, left and right are empty - new rand 3 (right)
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
+    else if (cells[ghost].classList.contains(string)
+      && !(cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && !(cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && !(cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
       && newRandNum === 3) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
 
     //---- STOP  GETTING STUCK IN CORNERS ----
     //----------------------------------------------
     // If right, top and left are blocked = go down
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && cells[pinkGhost + width].classList.contains('moveAlong')
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && cells[ghost + width].classList.contains('moveAlong')
     ) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
 
 
     // If right, bottom and left are blocked = go up
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && cells[pinkGhost - width].classList.contains('moveAlong')
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && cells[ghost - width].classList.contains('moveAlong')
     ) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
 
     // If bottom, top and right are blocked = go left
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost + 1].classList.contains('walls') || cells[ghost + 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls') || cells[ghost + width].classList.contains('moveAlong'))
+      && cells[ghost - 1].classList.contains('moveAlong')
     ) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
     // If bottom, top and left are blocked = go right
 
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls' || cells[pinkGhost + width].classList.contains('moveAlong')))
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
+    else if (cells[ghost].classList.contains(string)
+      && (cells[ghost - 1].classList.contains('walls') || cells[ghost - 1].classList.contains('moveAlong'))
+      && (cells[ghost - width].classList.contains('walls') || cells[ghost - width].classList.contains('moveAlong'))
+      && (cells[ghost + width].classList.contains('walls' || cells[ghost + width].classList.contains('moveAlong')))
+      && cells[ghost + 1].classList.contains('moveAlong')
     ) {
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
     // ---- random direction when reach up/down
 
     // if left is move along, right is wall move upwards in a line rand 1
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
-      && cells[pinkGhost + 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost - 1].classList.contains('moveAlong')
+      && cells[ghost + 1].classList.contains('walls')
+      && cells[ghost + width].classList.contains('notwalls')
+      && cells[ghost - width].classList.contains('notwalls')
       && randNum === 1) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
     // if left move along, right is wall move downward in a line rand 2
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
-      && cells[pinkGhost + 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost - 1].classList.contains('moveAlong')
+      && cells[ghost + 1].classList.contains('walls')
+      && cells[ghost + width].classList.contains('notwalls')
+      && cells[ghost - width].classList.contains('notwalls')
       && randNum === 2) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
     // if right is move along, left wall move upwards in a line rand 1
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
-      && cells[pinkGhost - 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost + 1].classList.contains('moveAlong')
+      && cells[ghost - 1].classList.contains('walls')
+      && cells[ghost + width].classList.contains('notwalls')
+      && cells[ghost - width].classList.contains('notwalls')
       && randNum === 1) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= width
+      cells[ghost].classList.add(string)
     }
     // if right move along, move downward in a line rand 2
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
-      && cells[pinkGhost - 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost + 1].classList.contains('moveAlong')
+      && cells[ghost - 1].classList.contains('walls')
+      && cells[ghost + width].classList.contains('notwalls')
+      && cells[ghost - width].classList.contains('notwalls')
       && randNum === 2) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += width
+      cells[ghost].classList.add(string)
     }
     // if top is move along, bottom wall move left in a line rand 1
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost - width].classList.contains('moveAlong')
-      && cells[pinkGhost + width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost - width].classList.contains('moveAlong')
+      && cells[ghost + width].classList.contains('walls')
+      && cells[ghost + 1].classList.contains('notwalls')
+      && cells[ghost - 1].classList.contains('notwalls')
       && randNum === 1) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
 
     // if top move along, bottom wall, move right in a line rand 2
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost - width].classList.contains('moveAlong')
-      && cells[pinkGhost + width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost - width].classList.contains('moveAlong')
+      && cells[ghost + width].classList.contains('walls')
+      && cells[ghost + 1].classList.contains('notwalls')
+      && cells[ghost - 1].classList.contains('notwalls')
       && randNum === 2) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
     // if bottom is move along, top wall move left in a line rand 1
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost + width].classList.contains('moveAlong')
-      && cells[pinkGhost - width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost + width].classList.contains('moveAlong')
+      && cells[ghost - width].classList.contains('walls')
+      && cells[ghost + 1].classList.contains('notwalls')
+      && cells[ghost - 1].classList.contains('notwalls')
       && randNum === 1) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost -= 1
+      cells[ghost].classList.add(string)
     }
     // if bottom move along, top wall, move right in a line rand 2
-    else if (cells[pinkGhost].classList.contains('pinkGhost')
-      && cells[pinkGhost + width].classList.contains('moveAlong')
-      && cells[pinkGhost - width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
+    else if (cells[ghost].classList.contains(string)
+      && cells[ghost + width].classList.contains('moveAlong')
+      && cells[ghost - width].classList.contains('walls')
+      && cells[ghost + 1].classList.contains('notwalls')
+      && cells[ghost - 1].classList.contains('notwalls')
       && randNum === 1) {
 
       //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
+      cells[ghost - 1].classList.remove('moveAlong')
+      cells[ghost + 1].classList.remove('moveAlong')
+      cells[ghost - width].classList.remove('moveAlong')
+      cells[ghost + width].classList.remove('moveAlong')
       //---
-      cells[pinkGhost].classList.remove('pinkGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('pinkGhost')
+      cells[ghost].classList.remove(string)
+      cells[ghost].classList.add('moveAlong')
+      ghost += 1
+      cells[ghost].classList.add(string)
     }
 
 
 
-    // ===== GREY GHOST START
 
-    //--------MOVE IN A LINE --------
-    //-----------------------------
-    // move upwards in a line
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('moveAlong') || cells[pinkGhost + width].classList.contains('walls'))
-      && !(cells[pinkGhost - width].classList.contains('walls'))
-    ) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-
-      // move downwards in a line
-    } else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('moveAlong') || cells[pinkGhost - width].classList.contains('walls'))
-      && !(cells[pinkGhost + width].classList.contains('walls'))
-    ) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-
-      // move left in a line
-    } else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + 1].classList.contains('moveAlong') || cells[pinkGhost + 1].classList.contains('walls'))
-      && !(cells[pinkGhost - 1].classList.contains('walls'))
-    ) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-
-
-      // move right in a line
-    } else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('moveAlong') || cells[pinkGhost - 1].classList.contains('walls'))
-      && !(cells[pinkGhost + 1].classList.contains('walls'))
-    ) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-
-
-      //-----TWO DIRECTIONS POSSIBLE----
-      //--------------------------------
-
-      //right blocked and top blocked rand 1 = go down
-    } else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && randNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
+    if (greyMode === true) {
+      cells[ghost].classList.add('greyGhost')
     }
-
-    //right blocked and top blocked rand 2 = go left
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && randNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // If right is blocked and bottom is blocked + rand 1 = up
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && randNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // If right is blocked and bottom is blocked + rand 2 = left
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && randNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // If left blocked and bottom is blocked + rand 1 = go up
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && randNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // If left blocked and bottom is blocked + rand 2 = go right
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && randNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-
-    // If left blocker and top blocked + rand 1 = go down
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && randNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // If left blocked and top blaocked + rand 2 = go right
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && randNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-
-    //---- THREE DIRECTIONS POSSIBLE----
-    //------------------------------------------
-
-    // Top, bottom and left are empty - new rand 1(left)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, bottom and left are empty - new rand 2 (bottom)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, bottom and left are empty - new rand 3 (top)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 3) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, bottom and right are empty - new rand 1(right)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, bottom and right are empty -  new rand 2 (bottom)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, bottom and right are empty - new rand 3 (up)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && newRandNum === 3) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Bottom, right and left are empty - new rand 1(left)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-
-    // Bottom, right and left are empty -  new rand 2 (down)
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // Bottom, right and left are empty -  new rand 3 (right)
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, left and right are empty - new rand 1(left)
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 1) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // Top, left and right are empty - new rand 2 (up)
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 2) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // Top, left and right are empty - new rand 3 (right)
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && !(cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && !(cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && newRandNum === 3) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-
-    //---- STOP  GETTING STUCK IN CORNERS ----
-    //----------------------------------------------
-    // If right, top and left are blocked = go down
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && cells[pinkGhost + width].classList.contains('moveAlong')
-    ) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-
-    // If right, bottom and left are blocked = go up
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && cells[pinkGhost - width].classList.contains('moveAlong')
-    ) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // If bottom, top and right are blocked = go left
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost + 1].classList.contains('walls') || cells[pinkGhost + 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls') || cells[pinkGhost + width].classList.contains('moveAlong'))
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
-    ) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // If bottom, top and left are blocked = go right
-
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && (cells[pinkGhost - 1].classList.contains('walls') || cells[pinkGhost - 1].classList.contains('moveAlong'))
-      && (cells[pinkGhost - width].classList.contains('walls') || cells[pinkGhost - width].classList.contains('moveAlong'))
-      && (cells[pinkGhost + width].classList.contains('walls' || cells[pinkGhost + width].classList.contains('moveAlong')))
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
-    ) {
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // ---- random direction when reach up/down
-
-    // if left is move along, right is wall move upwards in a line rand 1
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
-      && cells[pinkGhost + 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
-      && randNum === 1) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // if left move along, right is wall move downward in a line rand 2
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost - 1].classList.contains('moveAlong')
-      && cells[pinkGhost + 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
-      && randNum === 2) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // if right is move along, left wall move upwards in a line rand 1
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
-      && cells[pinkGhost - 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
-      && randNum === 1) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // if right move along, move downward in a line rand 2
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost + 1].classList.contains('moveAlong')
-      && cells[pinkGhost - 1].classList.contains('walls')
-      && cells[pinkGhost + width].classList.contains('notwalls')
-      && cells[pinkGhost - width].classList.contains('notwalls')
-      && randNum === 2) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += width
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // if top is move along, bottom wall move left in a line rand 1
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost - width].classList.contains('moveAlong')
-      && cells[pinkGhost + width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
-      && randNum === 1) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // if top move along, bottom wall, move right in a line rand 2
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost - width].classList.contains('moveAlong')
-      && cells[pinkGhost + width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
-      && randNum === 2) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    // if bottom is move along, top wall move left in a line rand 1
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost + width].classList.contains('moveAlong')
-      && cells[pinkGhost - width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
-      && randNum === 1) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost -= 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-    // if bottom move along, top wall, move right in a line rand 2
-    else if (cells[pinkGhost].classList.contains('greyGhost')
-      && cells[pinkGhost + width].classList.contains('moveAlong')
-      && cells[pinkGhost - width].classList.contains('walls')
-      && cells[pinkGhost + 1].classList.contains('notwalls')
-      && cells[pinkGhost - 1].classList.contains('notwalls')
-      && randNum === 1) {
-
-      //--
-      cells[pinkGhost - 1].classList.remove('moveAlong')
-      cells[pinkGhost + 1].classList.remove('moveAlong')
-      cells[pinkGhost - width].classList.remove('moveAlong')
-      cells[pinkGhost + width].classList.remove('moveAlong')
-      //---
-      cells[pinkGhost].classList.remove('greyGhost')
-      cells[pinkGhost].classList.add('moveAlong')
-      pinkGhost += 1
-      cells[pinkGhost].classList.add('greyGhost')
-    }
-
-    //======= END GREY GHOST ======
-
   }, 400)
 
   //===============================
@@ -1701,3 +1023,6 @@ function startGhost() {
 
 
 }
+
+
+
