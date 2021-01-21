@@ -9,7 +9,7 @@ body {
   align-items: center;
   margin: 0;
   background-color: #F5F5F5;
-  
+  touch-action: none;
   }
 
 main {
@@ -256,8 +256,8 @@ div.greyGhost {
   .grid {
     display: flex;
     flex-direction: row;
-    width: 600px;
-    height: 600px;
+    width: 400px;
+    height: 00px;
     flex-wrap: wrap;
   }
 
