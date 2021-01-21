@@ -26,7 +26,7 @@ h1
     font-size: 50px;
     display: flex;
     justify-content: center;
-    margin: 0px;
+    margin: 20px;
   }
 
 p {
@@ -38,21 +38,28 @@ p {
 .grid {
   display: flex;
   flex-direction: row;
-  width: 400px;
-  height: 400px;
+  width: 300px;
+  height: 300px;
   flex-wrap: wrap;
+  background-color: white;
+}
+
+.notwalls {
+  
+  
 }
 
 div {
 display: flex;
 justify-content: center;
+width: 15px;
 }
 
 .aboveGrid {
   justify-content: space-between;
   margin-bottom: 5px;
   height: 30px;
-  width: 100%;
+  width: 290px;
 }
 
 button {
@@ -63,9 +70,11 @@ button {
   align-content: center;
 }
 
+
 .startButton {
   width: 50%;
-  margin-right: 2px;
+  margin-right: 3px;
+  
 }
 
 .resetButton {
@@ -74,49 +83,51 @@ button {
 }
 
 .controls{
-  display: flex;
+width: 300px;
 justify-content: space-between;
 }
 
 .controlButton {
-  width: 75px;
-  height: 50px;
-  margin-top: 20px;
+  width: 70px;
+  height: 65px;
+  margin-top: 5px;
 }
 
 .walls {
   background-color: black;
   border: 1px solid black; 
-  width: 5px;
+ 
 }
 
-.notwalls {
-  background-color: white;
-  width: 5px;
+.finalScore {
+  font-size: 30px;
+  color: blueviolet;
+  font-family: 'Bungee', cursive;
+  width: 200px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .winner {
-height: 20px;
-display: flex;
-justify-content: center;
-padding-bottom: 10px;
-padding-top: 10px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .food1 {
-  background-color: black;
-  border: 8px solid white;
-  padding: 1px;
-}
+  background: url('images/food.png');
+  background-size: cover;
+  }
 
 
 .pacman {
   background-color:  yellow;
   font-size: 10px;
-  border: 1px solid yellow;
-  border-radius: 50%;
-  border: 2px sold white;
-
+  border: 2px solid white;
+  background: url('images/roshan.png');
+  background-size: cover;
 }
 
 .greenGhost {
@@ -177,16 +188,36 @@ div.greyGhost {
   
 }
 
+.begin {
+  width: 160px;
+}
+
+.roshman{
+  background-image: url('images/roshman-loser.png');
+  background-size: cover;
+  width: 100px;
+  height: 120px;
+}
+
+.roshmanwins {
+  background-image: url('images/roshman-winner.png');
+  background-size: cover;
+  width: 100px;
+  height: 120px; 
+}
+
 .life {
   color:black;
   font-family: 'Bungee', cursive;
+  font-size: 15px;
 }
 .lowerbar {
   color:black;
   font-family: 'Bungee', cursive;
   display: flex;
-  justify-content: left;
+  flex-direction: column;
   margin: 6px 0px;
+  font-size: 15px;
 }
 
 
@@ -212,8 +243,6 @@ div.greyGhost {
 @media only screen and (min-width: 800px){
 
   .controls {
-    display: flex;
-    justify-content: space-between;
     visibility: hidden;
   }
 
@@ -227,8 +256,8 @@ div.greyGhost {
   .grid {
     display: flex;
     flex-direction: row;
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
     flex-wrap: wrap;
   }
 
@@ -238,23 +267,30 @@ div.greyGhost {
     font-size: 60px;
     display: flex;
     justify-content: center;
-    margin: 0px;
+    margin: 5px;
   }
 
+  .aboveGrid{
+    margin-top: 15px;
+    width: 550px;
+  }
+
+ 
   .hidegrid {
     background-color: aqua;
     visibility: hidden;
   }
 
+  .begin {
+    width: 250px;
+  }
+  
+
+  .finalScore {
+    font-size: 50px;
+    color: blueviolet;
+    font-family: 'Bungee', cursive;
+    width: 400px;
+  }
 }
 
-/* @media only screen and (max-width: 375px){
-
-  .grid {
-    display: flex;
-    flex-direction: row;
-    width: 200px;
-    height: 100px;
-    flex-wrap: wrap;
-  }
-} */

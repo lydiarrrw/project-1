@@ -1,5 +1,3 @@
-
-//GRID & WALLS
 const grid = document.querySelector('.grid')
 const width = 20
 const cells = []
@@ -11,8 +9,8 @@ const walls = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
   329, 331, 333, 335, 336, 337, 339, 340, 342, 343, 344, 345, 349, 359, 360, 363, 364, 367, 371, 372, 374, 375, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388,
   389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399]
 const pen = [248, 250, 268, 269, 270, 289]
-const winner = document.querySelector('.winner')
-const startButton = document.querySelector('.startButton')
+const winner = document.querySelector('.finalScore')
+const result = document.querySelector('.image')
 
 let foodCount = 0
 let energizerCount = 0
@@ -21,7 +19,6 @@ let greyMode = false
 let lives = 3
 const livesLeft = document.querySelector('.life')
 //console.log(livesLeft)
-
 const energizer = [21, 38, 361, 358]
 let pacman = 47
 let score = 0
@@ -32,7 +29,7 @@ let orangeGhost = 269
 let blueGhost = 270
 
 
-
+//GRID & WALLS
 
 for (let index = 0; index < width ** 2; index++) {
   const cell = document.createElement('div')
@@ -75,17 +72,19 @@ function gameover() {
     livesLeft.innerHTML = lives
     grid.classList.remove('grid')
     grid.classList.add('hidegrid')
+    result.classList.add('roshman')
   } else if (foodCount === 0
     && energizerCount === 0) {
     cells[pacman].classList.remove('pacman')
     winner.innerHTML = `You win, your score is ${score}`
-    //console.log('winner')
-    
+    grid.classList.remove('grid')
+    grid.classList.add('hidegrid')
+    result.classList.add('roshmanwins')
+    //console.log('winner') 
   }
-  //console.log('hello', lives)
 }
 
-
+//===============KEYBOARD CONTROLS=======================
 
 document.addEventListener('keydown', function start(event) {
   const key = event.key
@@ -95,8 +94,8 @@ document.addEventListener('keydown', function start(event) {
   gameover(blueGhost, 'blueGhost')
   gameover(orangeGhost, 'orangeGhost')
 
-  if (key === 's' 
-   && lives >= 1) {
+  if (key === 's'
+    && lives >= 1) {
 
     cells[pacman].classList.remove('pacman')
     pacman += 1
@@ -121,7 +120,6 @@ document.addEventListener('keydown', function start(event) {
     score += 200
     energizerCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowRight'
     && cells[pacman + 1].classList.contains('notwalls')
     && (cells[pacman].classList.contains('food1'))) {
@@ -131,14 +129,12 @@ document.addEventListener('keydown', function start(event) {
     score += 10
     foodCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowRight'
     && cells[pacman + 1].classList.contains('notwalls')
     && !(cells[pacman].classList.contains('food1'))) {
     cells[pacman].classList.remove('pacman')
     pacman += 1 //right
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowLeft'
     && cells[pacman - 1].classList.contains('notwalls')
     && cells[pacman].classList.contains('energy')) {
@@ -148,7 +144,6 @@ document.addEventListener('keydown', function start(event) {
     score += 200
     energizerCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowLeft'
     && cells[pacman - 1].classList.contains('notwalls')
     && cells[pacman].classList.contains('food1')) {
@@ -158,15 +153,12 @@ document.addEventListener('keydown', function start(event) {
     score += 10
     foodCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowLeft'
     && cells[pacman - 1].classList.contains('notwalls')
     && !(cells[pacman].classList.contains('food1'))) {
     cells[pacman].classList.remove('pacman')
     pacman -= 1 //left
     cells[pacman].classList.add('pacman')
-
-
   } else if (key === 'ArrowDown'
     && cells[pacman + width].classList.contains('notwalls')
     && cells[pacman].classList.contains('energy')) {
@@ -176,8 +168,6 @@ document.addEventListener('keydown', function start(event) {
     score += 200
     energizerCount--
     cells[pacman].classList.add('pacman')
-
-
   } else if (key === 'ArrowDown'
     && cells[pacman + width].classList.contains('notwalls')
     && !(cells[pacman].classList.contains('food1'))) {
@@ -193,7 +183,6 @@ document.addEventListener('keydown', function start(event) {
     score += 10
     foodCount--
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowUp'
     && cells[pacman - width].classList.contains('notwalls')
     && cells[pacman].classList.contains('energy')) {
@@ -209,7 +198,6 @@ document.addEventListener('keydown', function start(event) {
     cells[pacman].classList.remove('pacman')
     pacman -= width //up
     cells[pacman].classList.add('pacman')
-
   } else if (key === 'ArrowUp'
     && cells[pacman - width].classList.contains('notwalls')
     && cells[pacman].classList.contains('food1')) {
@@ -219,13 +207,9 @@ document.addEventListener('keydown', function start(event) {
     score += 10
     foodCount--
     cells[pacman].classList.add('pacman')
-
   }
   //console.log(score)
 
-
-
-  // ==== GREY GHOST MODE =====
 
   if (cells[pacman].classList.contains('energy')) {
     greyMode = true
@@ -252,6 +236,152 @@ document.addEventListener('keydown', function start(event) {
 })
 
 
+//===============MOBILE CONTROLS=======================
+
+document.addEventListener('click', function start(event) {
+  const button = event.target.innerHTML
+  console.log(button)
+
+  gameover(greenGhost, 'greenGhost')
+  gameover(pinkGhost, 'pinkGhost')
+  gameover(blueGhost, 'blueGhost')
+  gameover(orangeGhost, 'orangeGhost')
+
+  if (button === 'START' && lives >= 1) {
+
+    cells[pacman].classList.remove('pacman')
+    pacman += 1
+    cells[pacman].classList.add('pacman')
+    startGhost(pinkGhost, 'pinkGhost', 268, 'moveAlongPink')
+    startGhost(blueGhost, 'blueGhost', 248, 'moveAlongBlue')
+    startGhost(greenGhost, 'greenGhost', 269, 'moveAlongGreen')
+    startGhost(orangeGhost, 'orangeGhost', 270, 'moveAlongOrange')
+
+  }
+  if (lives === 0) {
+    document.removeEventListener('keydown', start)
+  }
+
+
+  if (button === 'RIGHT'
+    && cells[pacman + 1].classList.contains('notwalls')
+    && cells[pacman].classList.contains('energy')) {
+    cells[pacman].classList.remove('energy')
+    cells[pacman].classList.remove('pacman')
+    pacman += 1 //right
+    score += 200
+    energizerCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'RIGHT'
+    && cells[pacman + 1].classList.contains('notwalls')
+    && (cells[pacman].classList.contains('food1'))) {
+    cells[pacman].classList.remove('pacman')
+    cells[pacman].classList.remove('food1')
+    pacman += 1 //right
+    score += 10
+    foodCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'RIGHT'
+    && cells[pacman + 1].classList.contains('notwalls')
+    && !(cells[pacman].classList.contains('food1'))) {
+    cells[pacman].classList.remove('pacman')
+    pacman += 1 //right
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'LEFT'
+    && cells[pacman - 1].classList.contains('notwalls')
+    && cells[pacman].classList.contains('energy')) {
+    cells[pacman].classList.remove('energy')
+    cells[pacman].classList.remove('pacman')
+    pacman -= 1 //left
+    score += 200
+    energizerCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'LEFT'
+    && cells[pacman - 1].classList.contains('notwalls')
+    && cells[pacman].classList.contains('food1')) {
+    cells[pacman].classList.remove('pacman')
+    cells[pacman].classList.remove('food1')
+    pacman -= 1 //left
+    score += 10
+    foodCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'LEFT'
+    && cells[pacman - 1].classList.contains('notwalls')
+    && !(cells[pacman].classList.contains('food1'))) {
+    cells[pacman].classList.remove('pacman')
+    pacman -= 1 //left
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'DOWN'
+    && cells[pacman + width].classList.contains('notwalls')
+    && cells[pacman].classList.contains('energy')) {
+    cells[pacman].classList.remove('energy')
+    cells[pacman].classList.remove('pacman')
+    pacman += width //down
+    score += 200
+    energizerCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'DOWN'
+    && cells[pacman + width].classList.contains('notwalls')
+    && !(cells[pacman].classList.contains('food1'))) {
+    cells[pacman].classList.remove('pacman')
+    pacman += width // down
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'DOWN'
+    && cells[pacman + width].classList.contains('notwalls')
+    && cells[pacman].classList.contains('food1')) {
+    cells[pacman].classList.remove('pacman')
+    cells[pacman].classList.remove('food1')
+    pacman += width // down
+    score += 10
+    foodCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'UP'
+    && cells[pacman - width].classList.contains('notwalls')
+    && cells[pacman].classList.contains('energy')) {
+    cells[pacman].classList.remove('energy')
+    cells[pacman].classList.remove('pacman')
+    pacman -= width //up
+    score += 200
+    energizerCount--
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'UP'
+    && cells[pacman - width].classList.contains('notwalls')
+    && !(cells[pacman].classList.contains('food1'))) {
+    cells[pacman].classList.remove('pacman')
+    pacman -= width //up
+    cells[pacman].classList.add('pacman')
+  } else if (button === 'UP'
+    && cells[pacman - width].classList.contains('notwalls')
+    && cells[pacman].classList.contains('food1')) {
+    cells[pacman].classList.remove('pacman')
+    cells[pacman].classList.remove('food1')
+    pacman -= width //up
+    score += 10
+    foodCount--
+    cells[pacman].classList.add('pacman')
+
+  }
+
+  if (cells[pacman].classList.contains('energy')) {
+    greyMode = true
+    greyGhostMode(pinkGhost)
+    greyGhostMode(orangeGhost)
+    greyGhostMode(blueGhost)
+    greyGhostMode(greenGhost)
+  }
+
+  function greyGhostMode(ghost) {
+    setTimeout(() => {
+      greyMode = false
+    }, 5000)
+
+  }
+  scoreKeeper.innerHTML = score
+  livesLeft.innerHTML = lives
+})
+
+
+//===============GHOST MOVEMENT=======================
 
 function startGhost(ghost, string, number, moveAlong) {
   // ADD GHOULS
@@ -1040,158 +1170,3 @@ function startGhost(ghost, string, number, moveAlong) {
 
 
 }
-
-//======================================
-
-document.addEventListener('click', function start(event) {
-  const button = event.target.innerHTML
-  console.log(button)
-
-  gameover(greenGhost, 'greenGhost')
-  gameover(pinkGhost, 'pinkGhost')
-  gameover(blueGhost, 'blueGhost')
-  gameover(orangeGhost, 'orangeGhost')
-
-  if (button === 'START'  && lives >= 1) {
-
-    cells[pacman].classList.remove('pacman')
-    pacman += 1
-    cells[pacman].classList.add('pacman')
-    startGhost(pinkGhost, 'pinkGhost', 268, 'moveAlongPink')
-    startGhost(blueGhost, 'blueGhost', 248, 'moveAlongBlue')
-    startGhost(greenGhost, 'greenGhost', 269, 'moveAlongGreen')
-    startGhost(orangeGhost, 'orangeGhost', 270, 'moveAlongOrange')
-
-  }
-  if (lives === 0) {
-    document.removeEventListener('keydown', start)
-  }
-
-
-  if (button === 'RIGHT'
-    && cells[pacman + 1].classList.contains('notwalls')
-    && cells[pacman].classList.contains('energy')) {
-    cells[pacman].classList.remove('energy')
-    cells[pacman].classList.remove('pacman')
-    pacman += 1 //right
-    score += 200
-    energizerCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'RIGHT'
-    && cells[pacman + 1].classList.contains('notwalls')
-    && (cells[pacman].classList.contains('food1'))) {
-    cells[pacman].classList.remove('pacman')
-    cells[pacman].classList.remove('food1')
-    pacman += 1 //right
-    score += 10
-    foodCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'RIGHT'
-    && cells[pacman + 1].classList.contains('notwalls')
-    && !(cells[pacman].classList.contains('food1'))) {
-    cells[pacman].classList.remove('pacman')
-    pacman += 1 //right
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'LEFT'
-    && cells[pacman - 1].classList.contains('notwalls')
-    && cells[pacman].classList.contains('energy')) {
-    cells[pacman].classList.remove('energy')
-    cells[pacman].classList.remove('pacman')
-    pacman -= 1 //left
-    score += 200
-    energizerCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'LEFT'
-    && cells[pacman - 1].classList.contains('notwalls')
-    && cells[pacman].classList.contains('food1')) {
-    cells[pacman].classList.remove('pacman')
-    cells[pacman].classList.remove('food1')
-    pacman -= 1 //left
-    score += 10
-    foodCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'LEFT'
-    && cells[pacman - 1].classList.contains('notwalls')
-    && !(cells[pacman].classList.contains('food1'))) {
-    cells[pacman].classList.remove('pacman')
-    pacman -= 1 //left
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'DOWN'
-    && cells[pacman + width].classList.contains('notwalls')
-    && cells[pacman].classList.contains('energy')) {
-    cells[pacman].classList.remove('energy')
-    cells[pacman].classList.remove('pacman')
-    pacman += width //down
-    score += 200
-    energizerCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'DOWN'
-    && cells[pacman + width].classList.contains('notwalls')
-    && !(cells[pacman].classList.contains('food1'))) {
-    cells[pacman].classList.remove('pacman')
-    pacman += width // down
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'DOWN'
-    && cells[pacman + width].classList.contains('notwalls')
-    && cells[pacman].classList.contains('food1')) {
-    cells[pacman].classList.remove('pacman')
-    cells[pacman].classList.remove('food1')
-    pacman += width // down
-    score += 10
-    foodCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'UP'
-    && cells[pacman - width].classList.contains('notwalls')
-    && cells[pacman].classList.contains('energy')) {
-    cells[pacman].classList.remove('energy')
-    cells[pacman].classList.remove('pacman')
-    pacman -= width //up
-    score += 200
-    energizerCount--
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'UP'
-    && cells[pacman - width].classList.contains('notwalls')
-    && !(cells[pacman].classList.contains('food1'))) {
-    cells[pacman].classList.remove('pacman')
-    pacman -= width //up
-    cells[pacman].classList.add('pacman')
-  } else if (button === 'UP'
-    && cells[pacman - width].classList.contains('notwalls')
-    && cells[pacman].classList.contains('food1')) {
-    cells[pacman].classList.remove('pacman')
-    cells[pacman].classList.remove('food1')
-    pacman -= width //up
-    score += 10
-    foodCount--
-    cells[pacman].classList.add('pacman')
-
-  }
-  //console.log(score)
-
-
-
-  // ==== GREY GHOST MODE =====
-
-  if (cells[pacman].classList.contains('energy')) {
-    greyMode = true
-    greyGhostMode(pinkGhost)
-    greyGhostMode(orangeGhost)
-    greyGhostMode(blueGhost)
-    greyGhostMode(greenGhost)
-
-  }
-
-  function greyGhostMode(ghost) {
-    setTimeout(() => {
-      greyMode = false
-    }, 5000)
-
-  }
-
-
-  scoreKeeper.innerHTML = score
-
-  livesLeft.innerHTML = lives
-
-
-})

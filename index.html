@@ -1,44 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Document</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <main>
     <h1>ROSH-MAN</h1>
-    
+
     <div class="aboveGrid">
-<p class="score">0</p> 
-<div>
-  <button class="startButton" type="button">START</button>
-<button class="resetButton" onClick="window.location.reload();">RESET</button>
-</div>
+     <div>
+        <p class="score">0</p>
+     </div>
+     
+      <div class="begin">
+        <button class="startButton" type="button">START</button>
+        <button class="resetButton" onClick="window.location.reload();">RESET</button>
+      </div>
     </div>
     <div class="grid">
-  </div>
-
-  <div class="lowerbar">
-    <div>Lives remaining: <span class="life"> 3</span></div>
-    <!-- <div class="cherries">cherries</div> -->
-  </div> 
-  <div>
-      <p class="winner"></p>
     </div>
-  <div class="controls">
-    <button class="controlButton" class="upButton">UP</button>
-    <button class="controlButton" class="downButton">DOWN</button>
-    <button class="controlButton" class="leftButton">LEFT</button>
-    <button class="controlButton" class="rightButton">RIGHT</button>
-  </div>
- 
-  </main>
-  
+
+    <div class="lowerbar">
+      <div class="score">Lives:<span class="life"> 3</span></div>
+      
+      <!-- <div class="cherries">cherries</div> -->
+    </div>
+    <div class="finalScore"></div>
+    <div class="image"></div>
+    <div class="controls">
+      <button type="button" class="controlButton" class="upButton">UP</button>
+      <button type="button" class="controlButton" class="downButton">DOWN</button>
+      <button type="button" class="controlButton" class="leftButton">LEFT</button>
+      <button type="button" class="controlButton" class="rightButton">RIGHT</button>
+    </div>
+   
+    </main>
+
   <script src="grid.js"></script>
 </body>
+
 </html>
