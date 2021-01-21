@@ -66,7 +66,7 @@ for (let index = 0; index < width ** 2; index++) {
 
 function gameover() {
   if (lives === 0) {
-    winner.innerHTML = `The ghosts beat you, your score is ${score}`
+    winner.innerHTML = `The ghosts beat you! Your score is ${score}`
     //console.log('loser')
     cells[pacman].classList.remove('pacman')
     livesLeft.innerHTML = lives
@@ -76,7 +76,7 @@ function gameover() {
   } else if (foodCount === 0
     && energizerCount === 0) {
     cells[pacman].classList.remove('pacman')
-    winner.innerHTML = `You win, your score is ${score}`
+    winner.innerHTML = `You win! Your score is ${score}`
     grid.classList.remove('grid')
     grid.classList.add('hidegrid')
     result.classList.add('roshmanwins')
@@ -240,7 +240,7 @@ document.addEventListener('keydown', function start(event) {
 
 document.addEventListener('click', function start(event) {
   const button = event.target.innerHTML
-  console.log(button)
+  //console.log(button)
 
   gameover(greenGhost, 'greenGhost')
   gameover(pinkGhost, 'pinkGhost')
@@ -460,7 +460,7 @@ function startGhost(ghost, string, number, moveAlong) {
         pacman = 47
         cells[pacman].classList.add('pacman')
         startGhost(ghost, string, number)
-      }, 1000)
+      }, 600)
 
       clearInterval(ghostsMoves)
 
