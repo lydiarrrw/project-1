@@ -257,7 +257,7 @@ div.greyGhost {
     display: flex;
     flex-direction: row;
     width: 400px;
-    height: 00px;
+    height: 400px;
     flex-wrap: wrap;
   }
 
@@ -272,7 +272,7 @@ div.greyGhost {
 
   .aboveGrid{
     margin-top: 15px;
-    width: 550px;
+    width: 400px;
   }
 
  
