@@ -34,6 +34,14 @@ p {
   font-family: 'Bungee', cursive;
 }
 
+.guide {
+  visibility: hidden;
+  padding: 0px;
+  margin: 0px;
+  height: 1px;
+  height: 1px
+}
+
 
 .grid {
   display: flex;
@@ -291,6 +299,15 @@ div.greyGhost {
     color: blueviolet;
     font-family: 'Bungee', cursive;
     width: 400px;
+  }
+
+  .guide {
+    color: black;
+    font-family: 'Bungee', cursive;
+    font-size: 10px;
+    padding-bottom: 8px;
+    margin: 0px;
+    visibility: visible;
   }
 }
 
