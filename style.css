@@ -304,7 +304,8 @@ div.greyGhost {
   .guide {
     color: black;
     font-family: 'Bungee', cursive;
-    font-size: 10px;
+    font-size: 8px;
+    text-align: center;
     padding-bottom: 8px;
     margin: 0px;
     visibility: visible;
