@@ -89,7 +89,7 @@ For ROSH-MAN, I used `touch action: none` in the CSS to prevent the zooming. Thi
 ## Artwork and fonts
 * The ghosts, and inspiration for theme, are from a ghost drawn by Roshan, my friend's 6 year-old nephew.
 * ROSH-MAN is a Memoji created on an iPhone.
-* The font family is fron Google Fonts are part of the Bungee family.
+* The font family is from Google Fonts are part of the Bungee family.
 
 
 
