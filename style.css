@@ -35,7 +35,7 @@ p {
 }
 
 .guide {
-  visibility: hidden;
+  display: none;
   padding: 0px;
   margin: 0px;
   height: 1px;
@@ -308,7 +308,6 @@ div.greyGhost {
     text-align: center;
     padding-bottom: 8px;
     margin: 0px;
-    visibility: visible;
-  }
+     }
 }
 
