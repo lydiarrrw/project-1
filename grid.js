@@ -1158,7 +1158,7 @@ function startGhost(ghost, string, number, moveAlong) {
     }
 
 
-.
+
 
     if (greyMode === true) {
       cells[ghost].classList.add('greyGhost')
