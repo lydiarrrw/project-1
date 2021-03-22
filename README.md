@@ -8,6 +8,7 @@ This was the first project of the Software Engineering Immersive course with GA.
 
 Given a list of game options to recreate, I chose Pac-Man to challenge myself.
 
+You can find a deployed version here: [ROSHMAN](https://lydiarrrw.github.io/project-1/)
 
 ## The Brief
 
