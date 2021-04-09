@@ -38,6 +38,39 @@ When creating the grid, I also added classes of 'food' and 'energizer'.
 
 This approach allowed me to navigate the grid using -1, +1, -width or +width.
 
+Code for the grid:
+
+```
+for (let index = 0; index < width ** 2; index++) {
+  const cell = document.createElement('div')
+
+  if (walls.includes(index)) {
+    cell.classList.add('walls')
+  } else {
+    cell.classList.add('notwalls')
+  }
+
+  if (energizer.includes(index)) {
+    cell.classList.add('energy')
+    energizerCount++
+  } else if (pen.includes(index)) {
+    cell.classList.add('pen')
+  } else if (cell.classList.contains('notwalls')) {
+    cell.classList.add('food1')
+    foodCount++
+  }
+
+
+  grid.appendChild(cell)
+  cells.push(cell)
+  //cell.innerHTML = index
+  cell.style.width = `${100 / width}%`
+  cell.style.height = `${100 / width}%`
+
+}
+
+```
+
 ### Ghost movement
 
 My inital approach to ghost movement was to generate and use random numbers to randomise the direction the ghosts moved. This proved problematic though as the ghost's behaviour was too random, especially when it could move along in a straight line, as per traditional versions of Pac-Man.
@@ -54,7 +87,7 @@ With this method, I encountered using this method was that I initally used one '
 
 **Detecting**
 
-There are checks in place for when ROSH-MAN and a ghost collide, this is when the class for pacman and the ghost class are on the same cell, and sends them back to their orginal positions.
+There are checks in place for when ROSH-MAN and a ghost collide, this is when the class for pacman and the ghost class are on the same cell, and sends them back to their original positions.
 
 **Timing** 🐜 🐛 🕷
 
@@ -62,11 +95,45 @@ The timing of the player and that of the ghost movement don't match so the playe
 
 ### Grey ghost mode
 
-When ROSH-MAN lands on an energizer, the ghosts go into grey mode for a set period of time. To do this, I used a boolean to check if they were in 'greyMode', adding this class on the cell that have the variable of the ghosts, and removing the original ghost class. A `setTimeout` then removes this class after a certain period of time. The grey ghost class is set to interact with the pacman class in a different way, but to have the same movement as a normal ghost.
+When ROSH-MAN lands on an energizer, the ghosts go into grey mode for a set period of time. To do this, I used a boolean to check if they were in 'greyMode', adding this class on the cell that have the variable of the ghosts, and removing the original ghost class. A timeout then removes this class after a certain period of time:
+
+```
+    if (greyMode === true) {
+      cells[ghost].classList.add('greyGhost')
+    }
+  }, 350)
+```
+
+The grey ghost class is set to interact with the pacman class in a different way, but to have the same movement as a normal ghost.
 
 ### Game over
 
-The game ends when either the lives equal 0 or when the food and engerizer counts are at 0. The game over message is a class which is hidden when either of those is not true.
+The game ends when either the lives equal 0 or when the food and energizer counts are at 0. Here is the function for the game over:
+
+```
+
+function gameover() {
+  if (lives === 0) {
+    winner.innerHTML = `The ghosts beat you! Your score is ${score}`
+    //console.log('loser')
+    cells[pacman].classList.remove('pacman')
+    livesLeft.innerHTML = lives
+    grid.classList.remove('grid')
+    grid.classList.add('hidegrid')
+    result.classList.add('roshman')
+  } else if (foodCount === 0
+    && energizerCount === 0) {
+    cells[pacman].classList.remove('pacman')
+    winner.innerHTML = `You win! Your score is ${score}`
+    grid.classList.remove('grid')
+    grid.classList.add('hidegrid')
+    result.classList.add('roshmanwins')
+    //console.log('winner') 
+  }
+}
+```
+
+The game over message is a class which is hidden when either of those is not true.
 
 ![](./gameover.png)
 
@@ -80,9 +147,11 @@ Following some further research, I found that this has been phased out of use du
 
 For ROSH-MAN, I used `touch action: none` in the CSS to prevent the zooming. This will be something I will look into further as I would like to find a way to overcome the zoom issue, but still allow some users to zoom where needed.
 
-## Improvements to be made
+## Improvements to be made and things I learnt
 
 * Refactor my code more - I was able to create a function to save repeated code within the ghost movement function however within that function, there are repeated sections that I could refactor further.
+* Alongside the point above, I would consider how my code could be slicker from the start. For example, I wrote the code to move a ghost around the grid and it worked. But when I came to apply this to all ghosts, and cut down on the lines of code, it broke what I had written. I learnt that I need to consider this from the start!
+* I had a lot of variables and classes called 'ghost' or variants of this. For future projects I will plan the names of these carefully as it did get a little confusing at times.
 * Accessibility - I would would work on the zooming issue I mentioned in the 'Stretch Goal' section.
 
 
